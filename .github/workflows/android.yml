@@ -11,6 +11,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v4
 
+    # Your dependencies look correct, keep them as they are.
     - name: Install system dependencies (complete autotools + ffi fix)
       run: |
         sudo apt update
@@ -37,10 +38,18 @@ jobs:
     - name: Install Buildozer
       run: |
         pip install --upgrade pip
+        # It's often safer to pin buildozer to a known working version, 
+        # though the current version is usually fine.
         pip install buildozer cython virtualenv
 
     - name: Build APK
+      # --- THE FIX IS HERE ---
+      # We define ACLOCAL_PATH so the build process finds the system libtool macros.
+      env:
+        ACLOCAL_PATH: /usr/share/aclocal
       run: |
+        # Optional: Sometimes clearing the cache is needed if a previous failed build left bad files.
+        # buildozer android clean 
         buildozer android debug
 
     - name: Upload APK
