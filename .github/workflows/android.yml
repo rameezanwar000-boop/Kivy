@@ -1,4 +1,4 @@
-name: Build APK
+name: Build Kivy APK
 
 on:
   workflow_dispatch:
@@ -8,25 +8,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v4
 
-    - name: Install dependencies
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    - name: Install Buildozer & dependencies
       run: |
         sudo apt update
-        sudo apt install -y python3-pip python3-setuptools python3-virtualenv zip unzip git openjdk-17-jdk
-
-    - name: Install buildozer
-      run: |
+        sudo apt install -y python3-pip python3-setuptools python3-venv git zip unzip
         pip install --upgrade pip
-        pip install buildozer cython==0.29.36
+        pip install buildozer cython virtualenv
 
-    - name: Build the APK
+    - name: Build APK
       run: |
-        buildozer -v android debug
+        buildozer android debug
+      continue-on-error: false
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: kivy-app
+        name: Kivy-APK
         path: bin/*.apk
