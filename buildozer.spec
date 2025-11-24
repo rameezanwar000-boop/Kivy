@@ -20,34 +20,34 @@ fullscreen = 0
 # Main entry point
 main.py = main.py
 
-# Requirements
-requirements = python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3
+# Requirements - UPDATED FOR COMPATIBILITY
+requirements = python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3,cython==0.29.36
 
 # Android permissions
 android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 
-# Android API configuration
+# API levels
 android.api = 33
 android.minapi = 21
 
-# Android architecture
+# Architecture
 android.arch = arm64-v8a
 
-# Android NDK version
-android.ndk = 25b
+# NDK version - TRY OLDER VERSION
+android.ndk = 23b
 
-# Android build tools
-android.sdk_path = /home/runner/.buildozer/android/platform/android-sdk
-android.ndk_path = /home/runner/.buildozer/android/platform/android-ndk-r25b
-
-# Android build settings
+# Build settings
 android.allow_backup = True
 android.accept_sdk_license = True
 
-# Icon and presplash (uncomment if you have these files)
+# Icons (uncomment if you have these files)
 # icon.filename = icon.png
 # presplash.filename = presplash.png
 # android.presplash_color = #FFFFFF
+
+# ADD THESE NEW SETTINGS FOR COMPATIBILITY
+android.gradle_download = True
+p4a.branch = develop
 
 [buildozer]
 # Log level (0 = error only, 1 = info, 2 = debug)
