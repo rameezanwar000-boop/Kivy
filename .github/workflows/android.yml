@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04 # Keep this on 22.04 for toolchain stability
+    runs-on: ubuntu-22.04  # Use Ubuntu 22.04 for better compatibility
 
     steps:
     - name: Checkout repo
@@ -15,34 +15,29 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y \
-          automake \
-          autoconf \
-          libtool \
-          libtool-bin \
-          autopoint \
-          m4 \
-          pkg-config \
-          build-essential \
-          clang \
-          cmake \
-          libffi-dev \
           python3-pip python3-setuptools python3-venv \
-          zip unzip
+          autoconf automake libtool pkg-config \
+          build-essential clang cmake \
+          libffi-dev libssl-dev \
+          zip unzip git
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: "3.10"
 
-    - name: Install Buildozer
+    - name: Install Buildozer and dependencies
       run: |
         pip install --upgrade pip
         pip install buildozer cython virtualenv
 
-    - name: Build APK
+    - name: Build APK with libffi workaround
+      env:
+        ACLOCAL_PATH: /usr/share/aclocal
+        LIBFFI_CFLAGS: "-I/usr/include"
+        LIBFFI_LIBS: "-lffi"
       run: |
-        # No need for ACLOCAL_PATH or ACLOCAL_ARGS at this point.
-        # The NDK version change should influence how libffi is built.
+        buildozer android clean
         buildozer android debug
 
     - name: Upload APK
