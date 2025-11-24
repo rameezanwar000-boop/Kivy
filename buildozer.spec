@@ -20,8 +20,8 @@ fullscreen = 0
 # Main entry point
 main.py = main.py
 
-# Requirements - UPDATED FOR COMPATIBILITY
-requirements = python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3,cython==0.29.36
+# Requirements
+requirements = python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3
 
 # Android permissions
 android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
@@ -30,10 +30,10 @@ android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 android.api = 33
 android.minapi = 21
 
-# Architecture
-android.arch = arm64-v8a
+# Architecture - CORRECTED: Use archs instead of arch
+android.archs = arm64-v8a
 
-# NDK version - TRY OLDER VERSION
+# NDK version
 android.ndk = 23b
 
 # Build settings
@@ -45,7 +45,7 @@ android.accept_sdk_license = True
 # presplash.filename = presplash.png
 # android.presplash_color = #FFFFFF
 
-# ADD THESE NEW SETTINGS FOR COMPATIBILITY
+# Build optimizations
 android.gradle_download = True
 p4a.branch = develop
 

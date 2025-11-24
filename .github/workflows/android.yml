@@ -26,16 +26,19 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.9"  # Use Python 3.9 for better compatibility
+        python-version: "3.9"
 
-    - name: Install Buildozer with specific versions
+    - name: Install Buildozer
       run: |
         pip install --upgrade pip
         pip install buildozer cython==0.29.36
 
-    - name: Build APK with workarounds
+    - name: Initialize Buildozer environment
       run: |
-        buildozer android clean
+        buildozer android update
+
+    - name: Build APK
+      run: |
         buildozer -v android debug
 
     - name: Upload APK
