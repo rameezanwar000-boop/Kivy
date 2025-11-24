@@ -32,9 +32,9 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython
 
-    - name: Download build dependencies
+    - name: Download Android dependencies first
       run: |
-        # Download Android SDK and NDK first
+        # Download Android SDK and NDK before building
         buildozer android update
 
     - name: Build APK
