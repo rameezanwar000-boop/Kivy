@@ -4,11 +4,10 @@ package.name = kivyapp
 package.domain = org.rameez
 
 source.dir = .
-source.include_exts = py,png,jpg,jpeg,kv,atlas,ttf,txt
+source.include_exts = py,png,jpg,jpeg,kv,ttf,txt
 
 version = 1.0
 orientation = portrait
-fullscreen = 0
 
 main.py = main.py
 
