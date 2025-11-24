@@ -5,13 +5,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # Keep this on 22.04 for toolchain stability
 
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
 
-    - name: Install system dependencies (complete autotools + ffi fix)
+    - name: Install system dependencies
       run: |
         sudo apt update
         sudo apt install -y \
@@ -40,11 +40,9 @@ jobs:
         pip install buildozer cython virtualenv
 
     - name: Build APK
-      env:
-        ACLOCAL_PATH: /usr/share/aclocal
-        # --- NEW ADDITION: Explicitly set ACLOCAL_ARGS ---
-        ACLOCAL_ARGS: "-I /usr/share/aclocal" 
       run: |
+        # No need for ACLOCAL_PATH or ACLOCAL_ARGS at this point.
+        # The NDK version change should influence how libffi is built.
         buildozer android debug
 
     - name: Upload APK
