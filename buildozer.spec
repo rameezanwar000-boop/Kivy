@@ -11,49 +11,31 @@ fullscreen = 0
 # Main entry point
 main.py = main.py
 
-# Python & libraries - ADD LIBFFI EXPLICITLY
-requirements = python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3,libffi
+# Python & libraries
+requirements = python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3
 
-# Permissions your app needs
+# Permissions
 android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
-android.enable_legacy_external_storage = True
 
 # API levels
 android.api = 33
 android.minapi = 21
 
-# Supported CPU architectures
-android.archs = arm64-v8a
+# Supported architectures
+android.arch = arm64-v8a
 
-# Java version
-android.sdk = 33
+# Build tools
 android.ndk = 25b
+android.sdk_path = /home/runner/.buildozer/android/platform/android-sdk
+android.ndk_path = /home/runner/.buildozer/android/platform/android-ndk-r25b
 
-# Allow backup
+# Build settings
 android.allow_backup = True
-
-# Icon and splash (optional)
-icon.filename = icon.png
-presplash.filename = presplash.png
-
-# Build optimizations
-android.gradle_download = True
 android.accept_sdk_license = True
 
-# Fix for long paths on Windows
-p4a.local_recipes = 
-p4a.branch = master
+# Icons (if available)
+# icon.filename = icon.png
+# presplash.filename = presplash.png
 
-# Avoid including large unnecessary modules
-exclude_dirs = bin,tests,docs
-exclude_patterns = *.md,*.rst
-
-# Keep Python multiprocessing functional
-android.allow_rebuild = True
-
-# Presplash color
-android.presplash_color = #FFFFFF
-
-# ADD THESE NEW LINES FOR BETTER COMPATIBILITY
-android.skip_update = False
-android.gradle_plugin = 7.0.0
+[buildozer]
+log_level = 2

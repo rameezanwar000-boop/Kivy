@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # Use Ubuntu 22.04 for better compatibility
+    runs-on: ubuntu-22.04  # Use 22.04 for better compatibility
 
     steps:
     - name: Checkout repo
@@ -19,7 +19,8 @@ jobs:
           autoconf automake libtool pkg-config \
           build-essential clang cmake \
           libffi-dev libssl-dev \
-          zip unzip git
+          zip unzip git wget curl \
+          openjdk-11-jdk
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -28,17 +29,17 @@ jobs:
 
     - name: Install Buildozer and dependencies
       run: |
-        pip install --upgrade pip
+        pip install --upgrade pip wheel setuptools
         pip install buildozer cython virtualenv
 
-    - name: Build APK with libffi workaround
-      env:
-        ACLOCAL_PATH: /usr/share/aclocal
-        LIBFFI_CFLAGS: "-I/usr/include"
-        LIBFFI_LIBS: "-lffi"
+    - name: Initialize Buildozer (download dependencies)
       run: |
-        buildozer android clean
-        buildozer android debug
+        buildozer init
+        buildozer android update
+
+    - name: Build APK
+      run: |
+        buildozer -v android debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
