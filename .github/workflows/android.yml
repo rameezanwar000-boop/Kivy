@@ -5,22 +5,48 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Build with Kivy Docker image
+    - name: Install dependencies
       run: |
-        docker run --rm \
-          -v $PWD:/src \
-          -w /src \
-          kivy/kivy:latest \
-          bash -c "pip install buildozer && buildozer -v android debug"
+        sudo apt update
+        sudo apt install -y python3-pip openjdk-11-jdk git autoconf automake libtool pkg-config zip unzip
+        
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        
+    - name: Install python-for-android with specific version
+      run: |
+        pip install python-for-android
+        
+    - name: Build APK with correct NDK
+      run: |
+        p4a apk \
+          --requirements=python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3 \
+          --private=. \
+          --package=org.rameez.kivyapp \
+          --name="KivyApp" \
+          --version=1.0 \
+          --bootstrap=sdl2 \
+          --arch=arm64-v8a \
+          --ndk-api=21 \
+          --ndk-version=25b
+        
+    - name: Find and upload APK
+      run: |
+        echo "APK files found:"
+        ls -la *.apk || ls -la | grep apk
+        find . -name "*.apk" -exec echo "Found: {}" \;
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: Kivy-APK
-        path: bin/*.apk
+        path: .
+        include: "*.apk"
