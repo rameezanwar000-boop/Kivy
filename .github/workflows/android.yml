@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # Use 22.04 for better compatibility
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout repo
@@ -17,9 +17,9 @@ jobs:
         sudo apt install -y \
           python3-pip python3-setuptools python3-venv \
           autoconf automake libtool pkg-config \
-          build-essential clang cmake \
+          build-essential \
           libffi-dev libssl-dev \
-          zip unzip git wget curl \
+          zip unzip \
           openjdk-11-jdk
 
     - name: Set up Python
@@ -27,15 +27,10 @@ jobs:
       with:
         python-version: "3.10"
 
-    - name: Install Buildozer and dependencies
+    - name: Install Buildozer
       run: |
-        pip install --upgrade pip wheel setuptools
-        pip install buildozer cython virtualenv
-
-    - name: Initialize Buildozer (download dependencies)
-      run: |
-        buildozer init
-        buildozer android update
+        pip install --upgrade pip
+        pip install buildozer cython
 
     - name: Build APK
       run: |
