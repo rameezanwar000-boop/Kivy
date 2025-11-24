@@ -26,32 +26,25 @@ jobs:
       with:
         python-version: "3.10"
 
-    - name: Install Buildozer
+    - name: Install python-for-android
       run: |
         pip install --upgrade pip
-        pip install buildozer
+        pip install python-for-android
 
-    - name: Force download dependencies
+    - name: Build APK with p4a
       run: |
-        # Completely remove any existing build directories
-        rm -rf .buildozer
-        rm -rf ~/.buildozer
-        
-        # Create the directory structure manually
-        mkdir -p .buildozer/android/platform/python-for-android
-        
-        # Clone python-for-android manually
-        git clone https://github.com/kivy/python-for-android.git .buildozer/android/platform/python-for-android
-        
-        # Now try buildozer
-        buildozer android debug || true
-
-    - name: Build APK
-      run: |
-        buildozer -v android debug
+        p4a apk \
+          --requirements=python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3 \
+          --arch=arm64-v8a \
+          --ndk-api=21 \
+          --name="KivyApp" \
+          --version=1.0 \
+          --package=org.rameez.kivyapp \
+          --private=$(pwd) \
+          --android-api=33
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: Kivy-APK
-        path: bin/*.apk
+        path: *.apk
