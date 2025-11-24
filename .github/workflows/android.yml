@@ -33,4 +33,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Kivy-APK
-        path: *.apk
+        path: KivyApp-1.0-arm64-v8a-debug.apk
