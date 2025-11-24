@@ -30,11 +30,11 @@ android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 android.api = 33
 android.minapi = 21
 
-# Architecture - CORRECTED: Use archs instead of arch
+# Architecture
 android.archs = arm64-v8a
 
-# NDK version
-android.ndk = 23b
+# NDK version - CORRECTED: Use 25b or higher as required
+android.ndk = 25b
 
 # Build settings
 android.allow_backup = True
@@ -47,7 +47,6 @@ android.accept_sdk_license = True
 
 # Build optimizations
 android.gradle_download = True
-p4a.branch = develop
 
 [buildozer]
 # Log level (0 = error only, 1 = info, 2 = debug)
