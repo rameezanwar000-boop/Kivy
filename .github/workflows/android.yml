@@ -21,14 +21,20 @@ jobs:
       with:
         python-version: '3.10'
         
-    - name: Install python-for-android with specific version
+    - name: Install python-for-android
       run: |
         pip install python-for-android
         
-    - name: Build APK with correct NDK
+    - name: Clean any existing NDK
+      run: |
+        rm -rf ~/.android/ndk
+        rm -rf /usr/local/lib/android/sdk/ndk
+        mkdir -p ~/.local/share/python-for-android
+        
+    - name: Build APK with forced NDK download
       run: |
         p4a apk \
-          --requirements=python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3 \
+          --requirements=python3,kivy==2.3.0 \
           --private=. \
           --package=org.rameez.kivyapp \
           --name="KivyApp" \
@@ -38,15 +44,8 @@ jobs:
           --ndk-api=21 \
           --ndk-version=25b
         
-    - name: Find and upload APK
-      run: |
-        echo "APK files found:"
-        ls -la *.apk || ls -la | grep apk
-        find . -name "*.apk" -exec echo "Found: {}" \;
-        
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: Kivy-APK
-        path: .
-        include: "*.apk"
+        path: "*.apk"
