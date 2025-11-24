@@ -185,29 +185,49 @@ YoutubeDL.__init__ = safe_ydl_init
 # --------------------------------------------------------------
 # GLOBAL SETTINGS
 # --------------------------------------------------------------
+# --------------------------------------------------------------
+# GLOBAL SETTINGS (ANDROID-SAFE)
+# --------------------------------------------------------------
+import os
+from pathlib import Path
+from kivy.utils import platform
+
+# Android storage imports
+if platform == "android":
+    from android.storage import app_storage_path, primary_external_storage_path
+
 APP_TITLE = "Kivy"
 HISTORY_FILE = "history.json"
-USER_DATA_DIR = Path(
-    os.getenv("APPDATA") or
-    os.getenv("XDG_CONFIG_HOME") or
-    Path.home() / ".config"
-) / "KiyyDownloader"
+
+# === USER DATA DIRECTORY (cookies, history, settings) ===
+if platform == "android":
+    USER_DATA_DIR = Path(app_storage_path()) / "KiyyDownloader"
+else:
+    USER_DATA_DIR = Path(
+        os.getenv("APPDATA") or
+        os.getenv("XDG_CONFIG_HOME") or
+        (Path.home() / ".config")
+    ) / "KiyyDownloader"
+
+USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 COOKIES_PATH = USER_DATA_DIR / "cookies.txt"
-USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 def ensure_valid_cookies_file():
     if not COOKIES_PATH.exists():
-        sample_cookies = "# Netscape HTTP Cookie File\n"
-        try:
-            COOKIES_PATH.write_text(sample_cookies, encoding='utf-8')
-        except:
-            pass
+        COOKIES_PATH.write_text("# Netscape HTTP Cookie File\n", encoding='utf-8')
 
 ensure_valid_cookies_file()
 
-DOWNLOAD_DIR = str(Path.home() / "Downloads" / "KiyyDownloads")
+# === DOWNLOAD DIRECTORY ===
+if platform == "android":
+    # saves to internal app storage (always allowed)
+    DOWNLOAD_DIR = str(Path(primary_external_storage_path()) / "KiyyDownloads")
+else:
+    DOWNLOAD_DIR = str(Path.home() / "Downloads" / "KiyyDownloads")
+
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+
 
 # --------------------------------------------------------------
 # HELPERS

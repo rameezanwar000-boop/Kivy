@@ -40,12 +40,11 @@ jobs:
         pip install buildozer cython virtualenv
 
     - name: Build APK
-      # --- THIS IS THE KEY FIX FOR THE ORIGINAL ERROR ---
       env:
         ACLOCAL_PATH: /usr/share/aclocal
+        # --- NEW ADDITION: Explicitly set ACLOCAL_ARGS ---
+        ACLOCAL_ARGS: "-I /usr/share/aclocal" 
       run: |
-        # We removed 'buildozer android clean' here.
-        # It is not needed on fresh CI runners and causes errors.
         buildozer android debug
 
     - name: Upload APK
