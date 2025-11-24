@@ -1,51 +1,42 @@
-name: Build Kivy APK
-
-on:
-  workflow_dispatch:
+name: Build APK with P4A
+on: [push] # Triggers on any push to the repository
 
 jobs:
-  build:
-    runs-on: ubuntu-22.04
-
+  build-android:
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y \
-          python3-pip python3-venv \
-          openjdk-11-jdk \
-          git autoconf automake libtool pkg-config \
-          zlib1g-dev libncurses5-dev \
-          zip unzip curl
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev automake openjdk-11-jdk
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install python-for-android
-      run: |
-        pip install --upgrade pip
-        pip install python-for-android
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install cython virtualenv python-for-android
 
-    - name: Build APK with p4a
-      run: |
-        p4a apk \
-          --requirements=python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3 \
-          --private=$(pwd) \
-          --package=org.rameez.kivyapp \
-          --name="KivyApp" \
-          --version=1.0 \
-          --bootstrap=sdl2 \
-          --arch=arm64-v8a \
-          --ndk-api=21 \
-          --android-api=33
+      - name: Build APK with python-for-android
+        run: |
+          p4a apk \
+            --requirements=python3,kivy \
+            --private=$(pwd) \
+            --package=org.yourname.yourapp \
+            --name="YourAppName" \
+            --version=1.0 \
+            --bootstrap=sdl2 \
+            --arch=arm64-v8a \
+            --ndk-api=21
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: Kivy-APK
-        path: *.apk
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-apk
+          path: *.apk
