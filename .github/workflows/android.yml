@@ -5,41 +5,22 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y python3-pip openjdk-11-jdk
-        
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - name: Build with Kivy Android GitHub Action
+      uses: kivy/android-action@v1
       with:
-        python-version: '3.10'
-        
-    - name: Clean environment
-      run: |
-        rm -rf ~/.android
-        rm -rf ~/.local/share/python-for-android
-        rm -rf ~/.cache/pip
-        
-    - name: Install and build
-      run: |
-        pip install python-for-android
-        p4a apk \
-          --requirements=python3,kivy \
-          --private=. \
-          --package=org.test.app \
-          --name=TestApp \
-          --bootstrap=sdl2 \
-          --ndk-version=25b
+        requirements: python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3
+        package: org.rameez.kivyapp
+        name: KivyApp
+        version: 1.0
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: Kivy-APK
-        path: "*.apk"
+        path: bin/*.apk
