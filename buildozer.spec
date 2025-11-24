@@ -33,17 +33,12 @@ android.minapi = 21
 # Architecture
 android.archs = arm64-v8a
 
-# NDK version - CORRECTED: Use 25b or higher as required
+# NDK version - Use 25b as required
 android.ndk = 25b
 
 # Build settings
 android.allow_backup = True
 android.accept_sdk_license = True
-
-# Icons (uncomment if you have these files)
-# icon.filename = icon.png
-# presplash.filename = presplash.png
-# android.presplash_color = #FFFFFF
 
 # Build optimizations
 android.gradle_download = True
