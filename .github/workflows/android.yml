@@ -18,8 +18,8 @@ jobs:
           python3-pip python3-venv \
           openjdk-11-jdk \
           git autoconf automake libtool pkg-config \
-          zlib1g-dev libncurses5-dev libncursesw5-dev \
-          zip unzip
+          zlib1g-dev libncurses5-dev \
+          zip unzip curl
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -35,12 +35,13 @@ jobs:
       run: |
         p4a apk \
           --requirements=python3,kivy==2.3.0,kivymd==1.2.0,plyer,yt-dlp,python-dateutil,urllib3 \
-          --arch=arm64-v8a \
-          --ndk-api=21 \
+          --private=$(pwd) \
+          --package=org.rameez.kivyapp \
           --name="KivyApp" \
           --version=1.0 \
-          --package=org.rameez.kivyapp \
-          --private=$(pwd) \
+          --bootstrap=sdl2 \
+          --arch=arm64-v8a \
+          --ndk-api=21 \
           --android-api=33
 
     - name: Upload APK
