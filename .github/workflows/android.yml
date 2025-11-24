@@ -14,34 +14,28 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y python3-pip openjdk-11-jdk git autoconf automake libtool pkg-config zip unzip
+        sudo apt install -y python3-pip openjdk-11-jdk
         
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
         
-    - name: Install python-for-android
+    - name: Clean environment
+      run: |
+        rm -rf ~/.android
+        rm -rf ~/.local/share/python-for-android
+        rm -rf ~/.cache/pip
+        
+    - name: Install and build
       run: |
         pip install python-for-android
-        
-    - name: Clean any existing NDK
-      run: |
-        rm -rf ~/.android/ndk
-        rm -rf /usr/local/lib/android/sdk/ndk
-        mkdir -p ~/.local/share/python-for-android
-        
-    - name: Build APK with forced NDK download
-      run: |
         p4a apk \
-          --requirements=python3,kivy==2.3.0 \
+          --requirements=python3,kivy \
           --private=. \
-          --package=org.rameez.kivyapp \
-          --name="KivyApp" \
-          --version=1.0 \
+          --package=org.test.app \
+          --name=TestApp \
           --bootstrap=sdl2 \
-          --arch=arm64-v8a \
-          --ndk-api=21 \
           --ndk-version=25b
         
     - name: Upload APK
